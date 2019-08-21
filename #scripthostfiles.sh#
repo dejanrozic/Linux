@@ -1,0 +1,531 @@
+#!/bin/bash	
+IME_SCRIPTE="scripthostfiles.sh"
+ORIGINAL_BACKUP_HIDE="/etc/.hosts_originalbackup"
+ORIGINAL_FILE="/etc/hosts"
+HOST_SERVER1="if 
+http://winhelp2002.mvps.org/hosts.txt"
+HOST_SERVER2="http://someonewhocares.org/hosts/hosts/"
+HOST_SERVER3="http://hosts-file.net/download/hosts.txt"
+HOST_SERVER_MALWARE="http://www.malwaredomainlist.com/hostslist/hosts.txt"
+HOST_SERVER_MALWARE1="http://www.malware.com.br/cgi/submit?action=list_hosts_win_127001"
+HOST_FILE="hosts.txt"
+ORIGINAL_FILE="hosts.txt"
+POT_SLO="/home/.hostfile_script.backup"
+DATE=$(date +"%d-%m-%Y : %H:%M")
+#SLO
+SLO_HOST_SERVER="ge.tt/api/1/files/5NgKw8Y/0/blob?download"
+IME_DATOTEKE="SLO_HOST_LISTS"
+
+rm -f host* HOST* SLO* test* *.index *.html *.html1 *.txt *.txt1
+
+#====================================================================
+#                                 ZEČETEK FUNKCIJ
+#====================================================================
+
+
+dolpoteg() {
+	# Iz dropboxa potegne file s SLO stranmi
+				echo ""
+				echo ""
+				echo "*********** dolpoteg datoteke    *********"
+				echo "***********   $IME_DATOTEKE  *************"
+				echo "****SERVER:$SLO_HOST_SERVER****"
+				echo "*********** ******************************"
+				echo ""
+				echo ""
+				
+				#sleep 3
+				
+				#*******************************
+				#*** SLO_HOST_LIST DOLPOTEG ****
+				#*******************************
+				wget $SLO_HOST_SERVER
+				cp blob?download SLO_HOST_LISTS
+				rm -f SLO_HOST_LISTS.1  blob?download 						
+}	
+
+preverjanje_dolpotega(){
+	
+		if [  -d $LINK ]
+			then
+			#Kopiraj backup v datoteko
+				
+					sudo " Kopiranje s strani $LINK --> USPEŠNO! "
+					
+			else
+			#Ustvari datoteko .hostfile_script.backup
+					sudo " Kopiranje s strani $LINK --> NEUSPEŠNO! "
+					rm -f host* HOST* SLO* test*
+					exit 2
+	   fi
+	
+	
+	
+	}
+# Funkcija dodajanja spletnih strani - ročno
+dodajanje_naslovov() {
+		echo "" >> SLO_HOST_LISTS
+		echo "127.0.0.1	$spletna_stran" >> SLO_HOST_LISTS
+	
+	}
+#====================================================================
+#                                KONEC FUNKCIJ
+#====================================================================	
+
+
+
+	#Preverimo ali obstaja skrivna mapa .hostfile_script.backup
+	if [  -d $POT_SLO ]
+			then
+			#Kopiraj backup v datoteko
+					echo "Zaznana SLO || kopiranje scripte (BACKUP) v mapo $POT_SLO "
+					#Kopiranje skripte na ustrezno lokacijo
+					sudo cp $IME_SCRIPTE $POT_SLO
+					sudo "Kopiranje $IME_SCRIPTE ->  $POT_SLO USPEŠNO! "
+					#sudo cp hostfiles.sh  $POT_$POT_SLOSLO/hostfiles.sh
+					#sudo cat hostfiles.sh >  $POT_SLO/hostfiles.sh
+			else
+			#Ustvari datoteko .hostfile_script.backup
+			sudo mkdir $POT_SLO
+			
+			#Preverjanje ali je file ustvarjen
+		if [  -d $POT_SLO ]
+			then
+			#če je mapa pravilno ustvarjena
+			echo "MAPA USPEŠNO USTVARJENA $POT_SLO/.hostfile_script.backup"
+			
+			#Kopiranje backup datoteke
+			sudo cp $IME_SCRIPTE $POT_SLO
+			sudo "Kopiranje $IME_SCRIPTE ->  $POT_SLO USPEŠNO! "
+			
+			else
+			#če mape ni ustvarjene oz. je ne more ustvariti
+			echo "Ne morem ustvariti mape $POT_SLO. Prosm ponovno zaženite program kasneje!"
+			exit 1
+		fi
+	fi
+	
+
+
+
+	# Preverimo če imamo SLO ali ENG verzijo LINUXA in prenesemo v ustrezno datoteko backup
+	
+	
+#Izbrisi zaslon
+
+
+echo "******************************************"
+echo "*********** PROGRAM - HOST FILES *********"
+echo "***********   DEJAN ROŽIČ    *************"
+echo "******************************************"
+
+#TRENTNA LOKACJA
+
+
+		##Preverjanje če izvorna datoteka obstaja
+		#if [  -e $HOST_FILE ]
+			#then
+			#echo "$HOST_FILE obstaja"
+			#else
+			#echo "$HOST_FILE ne obstaja, zato jo bom ustvaril"
+			#echo "Ustvarjanje datoteke  __ $HOST_FILE __"
+			#sudo touch $HOST_FILE
+				##Preverjanje če smo datoteko ustvarili
+				#if [  -e $HOST_FILE ]
+					#then
+					#echo "Datoteka $HOST_FILE uspešno ustvarjena"
+					#else
+					#echo "Ustvarjanje datoteke $HOST_FILE neuspešno"
+					#exit 1
+				#fi
+		#fi
+		
+	#================================================
+	#                 SERVEER N.1
+	#=================================================
+	echo "*********** dolpoteg datoteke    *********"
+	echo "***********   hosts.txt    ***************"
+	echo "SERVER:$HOST_SERVER1"
+
+	
+	#Povezava na server in dolpoteg hosts.txt
+	
+	echo "DOWNLOAD IZ $HOST_SERVER1"
+	sudo wget   $HOST_SERVER1
+		
+		if [  -s "hosts.txt" ]
+			then
+			echo "USPEŠNO"
+					
+			else
+			
+					sudo wget echo "DOWNLOAD IZ $HOST_SERVER1 NEUSPEŠNO"
+					rm -f host* HOST* SLO* test* blob* index* 
+					echo "NEUSPEŠNO"
+					exit 3
+	   fi
+	   
+	cat hosts.txt >  hosts_winhelp2002
+	cat hosts.txt > hosts_winhelp2002.original
+	rm -f  hosts.txt
+	
+	awk '{gsub("127.0.0.1  localhost", "");print}' hosts_winhelp2002 > hosts_winhelp20021 
+    awk '{gsub("::1  localhost #[IPv6]", "");print}'  hosts_winhelp20021 > hosts_winhelp2002
+	sed -e 's/\<::1  localhost #[IPv6]\>//g' hosts_winhelp2002 > hosts_winhelp20021
+	awk '{gsub("::1  localhost #[IPv6]", "");print}'  hosts_winhelp2002 > hosts_winhelp2002_potem
+	
+	#grep -v "#" hosts_winhelp20021 > hosts_winhelp2002_potem
+	
+	
+	#================================================
+	#                 SERVEER N.2
+	#=================================================
+	
+	#Povezava na server in dolpoteg index.html
+	echo "DOWNLOAD IZ $HOST_SERVER2"
+	sudo wget $HOST_SERVER2       						   #povezavan a server 
+		if [  -s "index.html" ]
+			then
+			echo "USPEŠNO"
+					
+			else
+			
+					sudo wget echo "DOWNLOAD IZ $HOST_SERVER2 NEUSPEŠNO" 
+					rm -f host* HOST* SLO* test* blob* index*
+					echo "NEUSPEŠNO"
+					exit 3
+	   fi
+	   
+	cat index.html > hosts_someonewhocares 				   #preimenovanje index.html 
+	cp hosts_someonewhocares hosts_someonewhocares.original #kopiranje
+	rm -f index.html									   #odstranjevanje index.html
+	
+
+
+		#odstranjevanje localhost
+		 awk '{gsub("127.0.0.1 	localhost", "");print}' hosts_someonewhocares > hosts_someonewhocares1 
+		 awk '{gsub("1127.0.0.1 	localhost.localdomain", "");print}'  hosts_someonewhocares1 > hosts_someonewhocares
+		 awk '{gsub("255.255.255.255	broadcasthost", "");print}' hosts_someonewhocares > hosts_someonewhocares1 
+		  awk '{gsub(".localdomain", "");print}' hosts_someonewhocares1 > hosts_someonewhocares
+		   awk '{gsub("::1		localhost", "");print}' hosts_someonewhocares > hosts_someonewhocares1
+		    awk '{gsub("127.0.0.1 	local", "");print}' hosts_someonewhocares1 > hosts_someonewhocares
+			 awk '{gsub("fe80::1%lo0     localhost", "");print}' hosts_someonewhocares > hosts_someonewhocares1
+			 awk '{gsub("::1		localhost", "");print}' hosts_someonewhocares1 > hosts_someonewhocares0
+			 awk '{gsub(" fe80::1%lo0     localhost", "");print}' hosts_someonewhocares > hosts_someonewhocares1
+			
+			cp hosts_someonewhocares1 hosts_someonewhocares  && rm -f hosts_someonewhocares1
+	
+	
+
+
+	
+ 
+	
+	#=============================================================
+	#                 SERVEER MALWARE N0
+	#http://www.malwaredomainlist.com/hostslist/hosts.txt
+	#=============================================================
+	#DOLPOTEG ZA MALWARE
+	echo "DOWNLOAD IZ $HOST_SERVER_MALWARE"
+	sudo wget $HOST_SERVER_MALWARE 
+		if [  -s "hosts.txt" ]
+			then
+			echo "USPEŠNO"
+					
+			else
+			
+					sudo wget echo "DOWNLOAD IZ $HOST_SERVER_MALWARE NEUSPEŠNO" 
+					rm -f host* HOST* SLO* test* blob* index*
+					echo "NEUSPEŠNO"
+					exit 3
+	   fi
+	cat hosts.txt >  hosts_malware
+	cat hosts.txt > hosts_malware.original
+	rm -f  hosts.txt
+	
+	#ODSTRANJEVANJE LOCALHOST
+	awk '{gsub("127.0.0.1  localhost", "");print}' hosts_malware > hosts_malware1
+	#grep -v "#" hosts_winhelp20021 > hosts_winhelp2002_potem
+	cp hosts_malware1 hosts_malware  && rm -f hosts_malware1
+	
+		
+		
+	#=============================================================
+	#                 SERVEER MALWARE N1
+	# Malware Patrol - Block List - http://www.malwarepatrol.net
+	#=============================================================
+	#DOLPOTEG ZA MALWARE
+	echo "DOWNLOAD IZ $HOST_SERVER_MALWARE1"
+	sudo wget $HOST_SERVER_MALWARE1 
+		if [  -s "submit?action=list_hosts_win_127001" ]
+			then
+			echo "USPEŠNO"
+					
+			else
+			
+					sudo wget echo "DOWNLOAD IZ $HOST_SERVER_MALWARE1 NEUSPEŠNO" 
+					rm -f host* HOST* SLO* test* blob* index*
+					echo "NEUSPEŠNO"
+					exit 3
+	   fi
+	cat submit?action=list_hosts_win_127001 >  hosts_malware_report
+	
+	rm -f  submit?action=list_hosts_win_127001
+	
+
+	
+	#=============================================================
+	#                 SERVEER N.3
+	# Malware Patrol - Block List - http://hosts-file.net/download/hosts.txt
+	#=============================================================
+	#DOLPOTEG ZA MALWARE
+	rm -f hosts.txt
+	echo "DOWNLOAD IZ $HOST_SERVER3"
+	sudo wget $HOST_SERVER3
+			if [  -s "hosts.txt" ]
+			then
+			echo "USPEŠNO"
+					
+			else
+			
+					sudo wget echo "DOWNLOAD IZ $HOST_SERVER3 NEUSPEŠNO"
+					rm -f host* HOST* SLO* test* blob* index*
+					echo "NEUSPEŠNO"
+					exit 3
+	   fi
+	cp hosts.txt hosts_hosts-file.net
+	cp hosts_hosts-file.net hosts_hosts-file.net.original
+	rm -f hosts.txt
+	grep -v "#" hosts_hosts-file.net > hosts_hosts-file.net1
+	cp hosts_hosts-file.net1 hosts_hosts-file.net
+	awk '{gsub("127.0.0.1  localhost", "");print}' hosts_hosts-file.net > hosts_hosts-file.net1
+	cp hosts_hosts-file.net1 hosts_hosts-file.net  && rm -f hosts_hosts-file.net1
+	awk '{gsub("::1		localhost", "");print}' hosts_hosts-file.net > hosts_hosts-file.net1
+	cp hosts_hosts-file.net1 hosts_hosts-file.net  && rm -f hosts_hosts-file.net1
+	
+	 # dobimo datoteko  ** hosts_hosts-file.net **
+	
+	
+	#ODSTRANJEVANJE LOCALHOST
+	#awk '{gsub("127.0.0.1  localhost", "");print}' hosts_malware1 > hosts_malware12
+	#cp hosts_malware12 hosts_malware1  && rm -f hosts_malware12
+	
+	#===========================================
+	# DROPBOX IN SLO HOST FILES
+	#===========================================	
+	echo "DOWNLOAD IZ $SLO_HOST_SERVER"
+	wget $SLO_HOST_SERVER
+		if [  -s "blob?download" ]
+			then
+			echo "USPEŠNO"
+					
+			else
+			#Ustvari datoteko .hostfile_script.backup
+					sudo wget echo "DOWNLOAD IZ $SLO_HOST_SERVER NEUSPEŠNO" 
+					rm -f host* HOST* SLO* test* blob* index*
+					echo "NEUSPEŠNO"
+					exit 3
+				
+	   fi
+	cp blob?download SLO_HOST_LIST
+	cat SLO_HOST_LIST | sed "s/\t\t*/ /g" > SLO_HOST_LIST1
+	cat SLO_HOST_LIST1 | tr -s '  ' ' ' > SLO_HOST_LIST2
+	sed 's/ \+ /\t/g' SLO_HOST_LIST2 > SLO_HOST_LIST3
+	cat SLO_HOST_LIST3 >> SLO_HOST_FILE
+	
+	rm -f blob?download SLO_HOST_FILE3 SLO_HOST_LIST2 SLO_HOST_LIST1
+	
+	
+	
+	
+	
+	
+	# Dodajanje datoteke PUSTI
+	
+	echo "Dodajanje host filov iz serverja:$HOST_SERVER1 "
+	cat  hosts_winhelp2002 >> hosts_konci
+	
+	
+	#Dodajanje datoteke PUSTI ok
+
+	echo "Dodajanje host filov iz serverja:$HOST_SERVER2 "
+	cat  hosts_someonewhocares >> hosts_konci
+	
+	
+	#DODAJANJE datotek ok
+
+	echo "Dodajanje host filov iz serverja $HOST_SERVER3"
+	cat hosts_hosts-file.net >> hosts_konci
+	
+	
+	# DODAJANJE datoteki ok
+	
+	echo "Dodajanje host filov iz serverja $HOST_SERVER_MALWARE "
+	cat  hosts_malware >> hosts_konci
+	
+	
+	# DODAJANJE datoteki ok
+
+	echo "Dodajanje host filov iz serverja $HOST_SERVER_MALWARE1"
+	cat  hosts_malware_report >> hosts_konci
+	
+	
+	 #DODAJANJE datoteki ok
+	
+	echo "Dodajanje host filov iz serverja $HOST_SERVER_MALWARE1"
+	cat  SLO_HOST_FILE >> hosts_konci
+	
+	
+				
+
+
+		echo "**********************************************"
+		echo "IZBERITE MOŽNOST IZ MENIJA IN PRITISNITE ENTER"
+		echo "**********************************************"
+		echo ""
+		echo "1) dodajanje spletne strani"
+		echo "2) nadaljuj s programom [ZAPRI PROGRAM]"
+		echo ""
+
+
+				
+		read moznosti
+
+		echo "$moznosti"
+
+		case  $moznosti  in
+               "1")
+               echo "Spodaj vpišite naslov spletne strani in pritisnite ENTER [primer: www.google.com]"
+               read spletna_stran       
+     		   dodajanje_naslovov #kličemo funkcijo za dodajanje naslovov
+                    ;;
+                "2")
+                
+				echo "Program bo ustvaril datoteko FINAL_HOSTFILE, prosimo počakajte!"
+             
+     		     
+                    ;;            
+              
+                *) 
+                echo "Tega ne morete izbrati!"
+                echo "Ponovno zaženite program"
+                exit 1               
+          esac 
+          
+    
+    #USTVARITEV FINAL_HOSTFILE.unsort
+     sed '1,26d' hosts_konci > FINAL_HOSTFILE.unsort
+     echo "ODSTRANJEVANJE TAB ZPRESLEDKOV"
+	 cat FINAL_HOSTFILE.unsort | sed "s/\t\t*/ /g" > FINAL_HOSTFILE.unsort1	#Odstranjevanje TAB znakov
+	 echo "ODSTRANJEVANJE PRESLEDKOV"
+	 cat FINAL_HOSTFILE.unsort1 | tr -s '  ' ' ' > FINAL_HOSTFILE.unsort #Odstranjevanje prostih znakov
+     echo "ODSTRANJEVANJE PRAZIH VRSTIC..."
+	 sed '/^$/d' FINAL_HOSTFILE.unsort > FINAL_HOSTFILE.unsort1
+     grep -v "fe80::1%lo0 localhost" FINAL_HOSTFILE.unsort1 > FINAL_HOSTFILE.unsort
+      rm -f FINAL_HOSTFILE.unsort1
+      echo ""  
+	  echo "SORTIRANJE IN ZBIRANJE HOST DATOTEK....PROSIMO POČAKAJTE LAHKO TRAJA NEKAJ ČASA!"
+	  sort hosts_konci| uniq > hosts_konci_sortiranoinuniq
+	
+	# dodajanje komentarja za konec ostalih hostfilov
+	
+	# kopiranje SLO datoteke na konec host datoteke
+	echo "ODSTRANJEVANJE TAB ZPRESLEDKOV"
+	cat hosts_konci_sortiranoinuniq | sed "s/\t\t*/ /g" > hosts_konci_sortiranoinuniq1	#Odstranjevanje TAB znakov
+	echo "ODSTRANJEVANJE PRESLEDKOV"
+	cat hosts_konci_sortiranoinuniq1 | tr -s '  ' ' ' > hosts_konci_sortiranoinuniq #Odstranjevanje prostih znakov
+	sudo "ODSTRANJEVANJE ZNAKA '#' IZ DATOTEKE..."
+	grep -v "#" hosts_konci_sortiranoinuniq > hosts_konci_sortiranoinuniq1 
+	awk '{gsub("fe80::1%lo0 localhost", "");print}' hosts_konci_sortiranoinuniq1 > hosts_konci_sortiranoinuniq
+	
+	#Brisanje vrstic od 1-3
+	sudo "BRISANJE VRSTIC..."
+	sed '1,3d' hosts_konci_sortiranoinuniq > hosts_konci_sortiranoinuniq1
+	
+	
+	#Brisanje praznih vrstic
+	echo "ODSTRANJEVANJE PRAZIH VRSTIC..."
+	sed '/^$/d' hosts_konci_sortiranoinuniq1 > hosts_konci_sortiranoinuniq 
+	
+
+  
+	cp hosts_konci_sortiranoinuniq FINAL_HOSTFILE
+	
+	echo "ODSTRANJEVANJE NEPOTREBNIH DATOTEK"
+	#ODSTRANJEVGANJE VSEH FILOV
+	rm -f host* HOST* SLO* test*
+	
+	
+	touch kopiranje
+	echo "#*********************************************"	>> kopiranje
+	echo "#************    HOSTS FILES    **************"	>> kopiranje
+	echo "#************     MADE BY       **************"	>> kopiranje
+	echo "#************    DEJAN ROŽIČ    **************"	>> kopiranje
+	echo "#*********************************************"	>> kopiranje
+	echo "#*********************************************"	>> kopiranje
+	echo "#* Nazadnje posodobljeno: $DATE *" 				>> kopiranje
+	echo "#============================================="	>> kopiranje
+	echo "#*           Last update: $DATE *" 				>> kopiranje
+	echo "" 				>> kopiranje
+	echo "" 				>> kopiranje
+	
+	cp kopiranje  kopiranje1
+	cat FINAL_HOSTFILE >> kopiranje
+	cp kopiranje FINAL_HOSTFILE
+	
+	
+	cat FINAL_HOSTFILE.unsort >> kopiranje1
+	#exit 0
+	cp kopiranje1 FINAL_HOSTFILE.unsort
+	
+	
+	rm -f kop*
+	
+
+	
+	clear
+	echo ""
+	echo "Uspešno ste ustvarili  datoteki FINAL_HOSTFILE.unsort in FINAL_HOSTFILE , eno od njiju (vsebino) prilepite v /etc/hosts"
+	echo "FINAL_HOSTFILE.unsort - Je nerazvrščena originalna datoteka (za tiste, ki hočejo videti originalno datoteko"
+	echo "FINAL_HOSTFILE - Za tiste, ki ne zanima originalna datoteka. TO datoteko odprete in vsebino kopirajte v /etc/hosts  "
+	echo ""
+	echo "#*********************************************"	
+	echo "#************    HOSTS FILES    **************"	
+	echo "#************     MADE BY       **************"	
+	echo "#************    DEJAN ROŽIČ    **************"	
+	echo "#*********************************************"	
+	echo "#*********************************************"	
+	echo "#* Nazadnje posodobljeno: $DATE *" 				
+	echo "#============================================="	
+	echo "#*           Last update: $DATE *" 				
+	
+	
+	
+	
+	
+	#if [ -d  $ORIGINAL_BACKUP_HIDE ]
+		#then
+		#sudo cp $ORIGINAL_FILE /etc/hosts.backup
+		#else
+		#sudo touch $ORIGINAL_BACKUP_HIDE /etc/hosts_nadomestni
+		#sudo cp $ORIGINAL_FILE $ORIGINAL_BACKUP_HIDE
+	#fi
+	
+	 #sudo cp $ORIGINAL_BACKUP_HIDE /etc/hosts
+	 #sudo cp /etc/hosts_nadomestni /etc/hosts
+	 #sudo cat FINAL_HOSTFILE >>  /etc/hosts
+	rm -f error
+	echo "" 
+	echo " ** SEDAJ LAHKO ZAPRRETE OKNO****" 
+	exit 0
+
+	#diff -c -w --ignore-case --ignore-matching-lines=localhost --ignore-space-change hosts_winhelp2002 hosts_someonewhocares | grep 127.0.0.1 > razlike
+	#awk '{gsub("!", "");print}' hosts_someonewhocares > hosts_someonewhocares1 
+
+	#cp ~/tmp/$HOST_FILE ~/Namizje/$HOST_FILE
+	#naredi backup#
+	#cp -iv host-prejeti.txt hosts.backup.txt
+	#cp -iv hosts.txt host-prejeti.txt
+	#rm -iv hosts.txt host-prejeti.txt
+
+
