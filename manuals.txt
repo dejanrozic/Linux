@@ -1,8 +1,10 @@
 #anable modprobe
 modprobe <package>
-#add user to a Group
+
+#add user to a Group (existing user)
 sudo usermod -a -G <groupName> <username>
 -a append
 -G group to apeed
+
 #add user to a group
 sudo useradd -G audio www-data
